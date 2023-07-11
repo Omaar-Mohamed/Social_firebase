@@ -1,6 +1,6 @@
 # Social_Firebase
 
-Social media application with firebase
+Social media application with Firebase and Flutter
 ## Getting Started
 
 This project is a starting point for a Flutter application.
