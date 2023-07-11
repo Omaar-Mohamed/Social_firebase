@@ -1,7 +1,6 @@
-# firebase_project_one
+# Social_Firebase
 
-A new Flutter project.
-
+Social media application with firebase
 ## Getting Started
 
 This project is a starting point for a Flutter application.
