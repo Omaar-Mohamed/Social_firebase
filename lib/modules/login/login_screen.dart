@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../cubit/login_cubit.dart';
-import '../cubit/login_states.dart';
+import '../cubit/app_cubit.dart';
+import '../cubit/app_states.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -23,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context)=>LoginCubit(),
-      child: BlocConsumer<LoginCubit,LoginStates>(
+      create: (BuildContext context)=>AppCubit(),
+      child: BlocConsumer<AppCubit,AppStates>(
         listener: (BuildContext context, state) {
           if (state is LoginErrorState) {
             Fluttertoast.showToast(
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         },
         builder: (BuildContext context, Object? state) {
-          var cubit = LoginCubit.get(context);
+          var cubit = AppCubit.get(context);
           return Scaffold(
             appBar: AppBar(
               title: Text('Login'),

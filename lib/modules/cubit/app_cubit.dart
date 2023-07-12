@@ -1,12 +1,13 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_project_one/modules/cubit/login_states.dart';
+import 'package:firebase_project_one/modules/cubit/app_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginCubit extends Cubit<LoginStates> {
+class AppCubit extends Cubit<AppStates> {
   // late CourseModel courseModel;
-  LoginCubit() : super(LoginInitialState());
-  static LoginCubit get(context) => BlocProvider.of(context);
+  AppCubit() : super(LoginInitialState());
+  static AppCubit get(context) => BlocProvider.of(context);
   void Register(
       {required String name,
       required String email,
@@ -16,14 +17,34 @@ emit(RegisterLoadingState());
 FirebaseAuth.instance
     .createUserWithEmailAndPassword(email: email, password: password)
     .then((value) {
-      emit(RegisterSuccessState());
+      // emit(RegisterSuccessState());  // good note deleted to solve the conflict of two methodos
       print(value.user!.email);
       print(value.user!.uid);
+      userCreate(name: name, email: email, phone: phone, uId: value.user!.uid);
   }
   ).catchError((error) {
     emit(RegisterErrorState(error.toString()));
   });
   }
+
+  void userCreate({
+    required String name,
+    required String email,
+    required String phone,
+    required String uId,
+}){
+emit(SocialCreateUserLoadingState());
+    FirebaseFirestore.instance.collection('users').doc(uId).set({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'uId': uId,
+    }).then((value) {
+      emit(SocialCreateUserSuccessState());
+    }).catchError((error){
+      emit(SocialCreateUserErrorState(error.toString()));
+    });
+}
 
   void Login(
       {
@@ -42,5 +63,6 @@ FirebaseAuth.instance
       emit(LoginErrorState(error.toString()));
     });
   }
+
 
 }

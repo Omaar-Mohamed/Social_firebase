@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_project_one/home.dart';
+import 'package:firebase_project_one/layout/home/social_layout.dart';
 import 'package:firebase_project_one/modules/login/login_screen.dart';
 import 'package:firebase_project_one/shared/bloc_observer.dart';
 import 'package:flutter/material.dart';
