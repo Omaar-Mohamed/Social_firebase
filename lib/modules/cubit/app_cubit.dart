@@ -55,7 +55,7 @@ emit(SocialCreateUserLoadingState());
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      emit(LoginSuccessState());
+      emit(LoginSuccessState(value.user!.uid));
       print(value.user!.email);
       print(value.user!.uid);
     }

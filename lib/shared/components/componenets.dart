@@ -34,4 +34,4 @@ void navigateAndReplace(
       builder:(context)=>widget,
     ),
 
-    );
+    ); 

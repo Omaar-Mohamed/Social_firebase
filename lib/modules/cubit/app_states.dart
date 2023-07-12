@@ -1,7 +1,10 @@
 abstract class AppStates {}
 class LoginInitialState extends AppStates{}
 class LoginLoadingState extends AppStates{}
-class LoginSuccessState extends AppStates{}
+class LoginSuccessState extends AppStates{
+  final String uId;
+  LoginSuccessState(this.uId);
+}
 class LoginErrorState extends AppStates{
   final String error;
   LoginErrorState(this.error);

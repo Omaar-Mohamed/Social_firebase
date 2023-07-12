@@ -1,10 +1,13 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_project_one/layout/home/social_layout.dart';
+import 'package:firebase_project_one/shared/network/local/cache_helper(shared_prefrenceds).dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../cubit/app_cubit.dart';
 import '../cubit/app_states.dart';
+import '../register/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -35,6 +38,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: Colors.red,
                 textColor: Colors.white,
                 fontSize: 16.0);
+          }
+          if(state is LoginSuccessState){
+            Fluttertoast.showToast(
+                msg: 'Login Success',
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 5,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder:(context)=> SocialLayout()));
+            });
           }
         },
         builder: (BuildContext context, Object? state) {
@@ -116,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                             )),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       ConditionalBuilder(
                         condition: state is! LoginLoadingState,
                         builder: (BuildContext context) { return ElevatedButton(
@@ -133,6 +149,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         );  },
                         fallback: (BuildContext context) { return Center(child: CircularProgressIndicator(),);  },
 
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('don\'t have an account?'),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()
+                              ),
+                              );
+
+                            },
+                            child: Text('Register'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
