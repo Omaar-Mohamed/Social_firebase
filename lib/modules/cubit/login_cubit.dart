@@ -39,6 +39,8 @@ emit(SocialCreateUserLoadingState());
       'email': email,
       'phone': phone,
       'uId': uId,
+      'image': 'https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
+      'bio': 'write your bio ...',
       'isEmailVerified': false,
     }).then((value) {
       emit(SocialCreateUserSuccessState());

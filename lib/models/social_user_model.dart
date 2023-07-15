@@ -4,6 +4,8 @@ class SocialUserModel
   String? email;
   String? phone;
   String? uId;
+  String? image;
+  String? bio;
   bool? isEmailVerified;
 
   SocialUserModel({
@@ -11,6 +13,8 @@ class SocialUserModel
     this.email,
     this.phone,
     this.uId,
+    this.image,
+    this.bio,
     this.isEmailVerified,
   });
 
@@ -20,6 +24,8 @@ class SocialUserModel
     email = json['email'];
     phone = json['phone'];
     uId = json['uId'];
+    image = json['image'];
+    bio = json['bio'];
     isEmailVerified = json['isEmailVerified'];
   }
 
@@ -30,6 +36,8 @@ class SocialUserModel
       'email': email,
       'phone': phone,
       'uId': uId,
+      'image': image,
+      'bio': bio,
       'isEmailVerified': isEmailVerified,
     };
   }
