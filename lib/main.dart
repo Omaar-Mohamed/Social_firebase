@@ -1,10 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_project_one/layout/home/social_layout.dart';
+import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
 import 'package:firebase_project_one/modules/login/login_screen.dart';
 import 'package:firebase_project_one/shared/bloc_observer.dart';
+import 'package:firebase_project_one/shared/constants/constants.dart';
 import 'package:firebase_project_one/shared/network/local/cache_helper(shared_prefrenceds).dart';
+import 'package:firebase_project_one/shared/style/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/register/register_screen.dart';
 
@@ -23,8 +28,8 @@ void main() async {
 
 
   Widget widget;
-  var uId = CacheHelper.getData(key: 'uId');
-  if (uId != null) {
+  uId = CacheHelper.getData(key: 'uId');
+  if (uId != '') {
     widget= SocialLayout();
   } else {
     widget= LoginScreen();
@@ -46,9 +51,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: startWidget,
+    return MultiBlocProvider(
+      providers: [
+
+          BlocProvider(
+            create: (BuildContext context) => SocialCubit()..getUserData(),
+          ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.light,
+        home: startWidget,
+      ),
     );
   }
 }

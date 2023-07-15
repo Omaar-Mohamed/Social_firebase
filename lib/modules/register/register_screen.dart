@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../layout/home/social_layout.dart';
-import '../cubit/app_cubit.dart';
-import '../cubit/app_states.dart';
+import '../cubit/login_cubit.dart';
+import '../cubit/login_states.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -26,8 +26,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit(),
-      child: BlocConsumer<AppCubit, AppStates>(
+      create: (BuildContext context) => LoginCubit(),
+      child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (BuildContext context, state) {
           if (state is RegisterErrorState) {
             Fluttertoast.showToast(
@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           }
         },
         builder: (BuildContext context, Object? state) {
-          var cubit = AppCubit.get(context);
+          var cubit = LoginCubit.get(context);
           return Scaffold(
             appBar: AppBar(
               title: Text('Register'),

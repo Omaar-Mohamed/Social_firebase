@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_project_one/modules/cubit/app_states.dart';
+import 'package:firebase_project_one/modules/cubit/login_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AppCubit extends Cubit<AppStates> {
+class LoginCubit extends Cubit<LoginStates> {
   // late CourseModel courseModel;
-  AppCubit() : super(LoginInitialState());
-  static AppCubit get(context) => BlocProvider.of(context);
+  LoginCubit() : super(LoginInitialState());
+  static LoginCubit get(context) => BlocProvider.of(context);
   void Register(
       {required String name,
       required String email,
@@ -39,6 +39,7 @@ emit(SocialCreateUserLoadingState());
       'email': email,
       'phone': phone,
       'uId': uId,
+      'isEmailVerified': false,
     }).then((value) {
       emit(SocialCreateUserSuccessState());
     }).catchError((error){
@@ -63,6 +64,7 @@ emit(SocialCreateUserLoadingState());
       emit(LoginErrorState(error.toString()));
     });
   }
+
 
 
 }
