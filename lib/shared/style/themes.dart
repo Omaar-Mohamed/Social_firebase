@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 ThemeData lightTheme =ThemeData(
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
+
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.white,
         statusBarIconBrightness: Brightness.dark,
@@ -14,6 +15,9 @@ ThemeData lightTheme =ThemeData(
         color: Colors.black,
         fontSize: 20,
         fontWeight: FontWeight.bold,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.black,
       ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(

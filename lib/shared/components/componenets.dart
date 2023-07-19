@@ -34,4 +34,26 @@ void navigateAndReplace(
       builder:(context)=>widget,
     ),
 
-    ); 
+    );
+
+PreferredSizeWidget defaultAppbar(
+    {
+      required BuildContext context,
+      String? title,
+      List<Widget>? actions,
+      Widget? leading,
+    }) =>AppBar(
+  leading: IconButton(
+    onPressed: () {
+      Navigator.pop(context);
+    },
+    icon: Icon(
+      Icons.arrow_back,
+    ),
+  ),
+  title: Text(
+    title??'',
+  ),
+  titleSpacing: 5.0,
+  actions: actions,
+);

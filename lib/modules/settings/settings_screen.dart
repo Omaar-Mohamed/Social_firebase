@@ -1,7 +1,10 @@
 import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
 import 'package:firebase_project_one/modules/cubit/social_states.dart';
+import 'package:firebase_project_one/shared/components/componenets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../edit_profile/edit_profile_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -12,52 +15,52 @@ class SettingsScreen extends StatelessWidget {
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) {
         var cubit = SocialCubit.get(context);
-        var userModel = SocialCubit.get(context).model;
+        var userModel = SocialCubit.get(context).userModel;
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.2,
+                height: MediaQuery.of(context).size.height * 0.29,
                 child: Stack(
                   alignment: AlignmentDirectional.bottomCenter,
                   children: [
                     Align(
                       alignment: AlignmentDirectional.topCenter,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.23,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(4),
-                            topRight: Radius.circular(4),
-                          ),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              '${userModel!.cover}',
+                      child: Stack(
+                        alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.23,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(4),
+                                topRight: Radius.circular(4),
+                              ),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  '${userModel!.cover}',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            fit: BoxFit.cover,
                           ),
-                        ),
+
+                        ],
                       ),
                     ),
                     Positioned(
                       bottom: 0,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 4,
-                          ),
-                        ),
+                      child: CircleAvatar(
+                        radius: MediaQuery.of(context).size.width * 0.18,
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+
                         child: CircleAvatar(
-                          radius: 15,
+                          radius: MediaQuery.of(context).size.width * 0.17 ,
                           backgroundImage: NetworkImage(
                             '${userModel!.image}',
                           ),
+
                         ),
                       ),
                     ),
@@ -148,7 +151,10 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: OutlinedButton(
-                          onPressed: () {}, child: Text('Add Photos'))),
+                          onPressed: () {
+                            navigateTo(context,  EditProfile());
+                          },
+                          child: Text('Edit Profile'))),
 
                 ],
               ),
