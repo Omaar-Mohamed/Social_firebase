@@ -40,6 +40,7 @@ emit(SocialCreateUserLoadingState());
       'phone': phone,
       'uId': uId,
       'image': 'https://image.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg',
+      'cover': 'https://img.freepik.com/free-photo/3d-cartoon-background-children_23-2150473126.jpg?w=826&t=st=1689743391~exp=1689743991~hmac=7d790d7216df58df79e936d5a26b6ef6b1ded8fd0b40540c419b88c09d0a95e0',
       'bio': 'write your bio ...',
       'isEmailVerified': false,
     }).then((value) {

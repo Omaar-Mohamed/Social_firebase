@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_project_one/layout/home/social_layout.dart';
 import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
 import 'package:firebase_project_one/modules/login/login_screen.dart';
+import 'package:firebase_project_one/modules/settings/settings_screen.dart';
 import 'package:firebase_project_one/shared/bloc_observer.dart';
 import 'package:firebase_project_one/shared/constants/constants.dart';
 import 'package:firebase_project_one/shared/network/local/cache_helper(shared_prefrenceds).dart';
