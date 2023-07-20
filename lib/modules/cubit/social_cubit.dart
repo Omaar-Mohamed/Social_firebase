@@ -85,8 +85,13 @@ void changeBottomNavBar(int index) {
     }
   }
 
-String? profileImageUrl;
-void uploadProfileImage(){
+// String? profileImageUrl;
+void uploadProfileImage({
+  required String name,
+  required String phone,
+  required String bio,
+}){
+    emit(SocialUserUpdateLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child('users/${Uri.file(profileImage!.path).pathSegments.last}')
@@ -94,7 +99,13 @@ void uploadProfileImage(){
         .then((value) {
       value.ref.getDownloadURL().then((value) {
         print(value);
-        profileImageUrl=value;
+        updateUser(
+          name: name,
+          phone: phone,
+          bio:bio,
+          image: value,
+        );
+        // profileImageUrl=value;
         // updateUser(
         //   name: userModel!.name,
         //   phone: userModel!.phone,
@@ -102,7 +113,7 @@ void uploadProfileImage(){
         //   image: value,
         //   cover: userModel!.cover,
         // );
-        emit(SocialUploadProfileImageSuccessState());
+        // emit(SocialUploadProfileImageSuccessState());
       }).catchError((error){
         emit(SocialUploadProfileImageErrorState());
       });
@@ -111,24 +122,29 @@ void uploadProfileImage(){
     });
 }
 
-String? coverImageUrl;
-void uploadCoverImage(){
-    firebase_storage.FirebaseStorage.instance
+// String? coverImageUrl;
+void uploadCoverImage({
+  required String name,
+  required String phone,
+  required String bio,
+}){
+  emit(SocialUserUpdateLoadingState());
+  firebase_storage.FirebaseStorage.instance
         .ref()
         .child('users/${Uri.file(coverImage!.path).pathSegments.last}')
         .putFile(coverImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
         print(value);
-        coverImageUrl=value;
-        // updateUser(
-        //   name: userModel!.name,
-        //   phone: userModel!.phone,
-        //   bio: userModel!.bio,
-        //   image: value,
-        //   cover: userModel!.cover,
-        // );
-        emit(SocialUploadCoverImageSuccessState());
+        // coverImageUrl=value;
+        updateUser(
+          name: name,
+          phone: phone,
+          bio: bio,
+          // image: value,
+          cover: value,
+        );
+        // emit(SocialUploadCoverImageSuccessState());
       }).catchError((error){
         emit(SocialUploadCoverImageErrorState());
       });
@@ -136,48 +152,52 @@ void uploadCoverImage(){
       emit(SocialUploadCoverImageErrorState());
     });
 }
-void updateUserImages({
-  required String name,
-  required String phone,
-  required String bio,
-
-}) {
-  emit(SocialUserUpdateLoadingState());
-  if(coverImage!=null){
-  uploadCoverImage();
-  }else if(profileImage!=null){
-    uploadProfileImage();
-  }else if(coverImage!=null&&profileImage!=null){
-    uploadCoverImage();
-    uploadProfileImage();
-  }
-
-  else{
-updateUser(name: name, phone: phone, bio: bio);
-  }
-
-
-}
+// void updateUserImages({
+//   required String name,
+//   required String phone,
+//   required String bio,
+//
+// }) {
+//   emit(SocialUserUpdateLoadingState());
+//   if(coverImage!=null){
+//   uploadCoverImage();
+//   }else if(profileImage!=null){
+//     uploadProfileImage();
+//   }else if(coverImage!=null&&profileImage!=null){
+//     uploadCoverImage();
+//     uploadProfileImage();
+//   }
+//
+//   else{
+// updateUser(name: name, phone: phone, bio: bio);
+//   }
+//
+//
+// }
 
 void updateUser({
   required String name,
   required String phone,
   required String bio,
+  String? cover ,
+  String? image,
 
 }){
+
   SocialUserModel model = SocialUserModel(
     name: name,
     phone: phone,
     bio: bio,
     email: userModel!.email,
-    image: userModel!.image,
-    cover: userModel!.cover,
-    uId: userModel!.uId,
+    image: image ?? userModel!.image,
+    cover: cover ?? userModel!.cover,
+    uId: userModel!.uId ,
     isEmailVerified: false,
 
   );
   FirebaseFirestore.instance.collection('users').doc(userModel!.uId).update(
       model.toMap()).then((value) {
+        emit(SocialUserUpdateSuccessState());
     getUserData();
   }).catchError((error) {
     print(error.toString());

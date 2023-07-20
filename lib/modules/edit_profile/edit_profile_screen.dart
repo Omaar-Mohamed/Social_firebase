@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
 import 'package:firebase_project_one/modules/cubit/social_states.dart';
+import 'package:firebase_project_one/modules/settings/settings_screen.dart';
 import 'package:firebase_project_one/shared/components/componenets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,11 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  BlocConsumer<SocialCubit,SocialStates>(
-      listener: (BuildContext context, state) {  },
+      listener: (BuildContext context, state) {
+        // if(state is SocialUserUpdateSuccessState){
+        //   navigateTo(context,SettingsScreen() );
+        // }
+      },
       builder: (BuildContext context, Object? state) {
         var cubit=SocialCubit.get(context);
         var userModel=SocialCubit.get(context).userModel;
@@ -134,8 +139,55 @@ class EditProfile extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
+                if(SocialCubit.get(context).profileImage !=null || SocialCubit.get(context).coverImage != null)
+                  Row(
+                  children: [
+                    if(SocialCubit.get(context).profileImage !=null)
+                      Expanded(
+                        child: MaterialButton(
+                        onPressed: (){
+                        SocialCubit.get(context).uploadProfileImage(
+                            name: nameController.text,
+                            phone: phoneController.text,
+                            bio: bioController.text
+                        );
+                    },
+                        child: Text(
+                          'Change Image',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                    ),
+                      ),
+                    Spacer(),
+                    if(SocialCubit.get(context).coverImage !=null)
+                     Expanded(
+                       child: MaterialButton(
+                        onPressed: (){
+                        // SocialCubit.get(context).changeBottomSheetState();
+                        SocialCubit.get(context).uploadCoverImage(
+                            name: nameController.text,
+                            phone: phoneController.text,
+                            bio: bioController.text
+                        );
+                    },
+                        child: Text(
+                          'Change Cover',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                    ),
+                     ),
+                  ],
+                    ),
+SizedBox(
+  height: MediaQuery.of(context).size.height * 0.02,
+),
+
                 TextFormField(
                   controller: nameController,
                   keyboardType: TextInputType.name,

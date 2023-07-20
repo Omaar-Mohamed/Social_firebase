@@ -57,3 +57,36 @@ PreferredSizeWidget defaultAppbar(
   titleSpacing: 5.0,
   actions: actions,
 );
+
+Widget defaultTextButton({
+  required Function function,
+  required String text,
+}) =>
+    TextButton(
+      onPressed: () {
+        function();
+      },
+      child: Text(
+        text.toUpperCase(),
+      ),
+    );
+Widget defaultButton({
+  required Function function,
+  required String text,
+}){
+  return Container(
+    width: double.infinity,
+    color: Colors.blue,
+    child: MaterialButton(
+      onPressed: () {
+        function();
+      },
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+    ),
+  );
+}
