@@ -44,10 +44,10 @@ class SocialLayout extends StatelessWidget {
                   icon: Icon(Icons.chat),
                   label: 'Chats',
               ),
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.post_add),
-              //   label: 'Post',
-              // ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.post_add),
+                label: 'Post',
+              ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: 'Users',

@@ -1,4 +1,7 @@
+import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
+import 'package:firebase_project_one/modules/cubit/social_states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../shared/components/componenets.dart';
 
@@ -7,20 +10,109 @@ class NewPostScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: defaultAppbar(context: context, title: 'Edit Profile', actions: [
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            'POST',
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+    return BlocConsumer<SocialCubit,SocialStates>(
+      listener: (BuildContext context, state) {  },
+      builder: (BuildContext context, Object? state) {
+        return Scaffold(
+          appBar: defaultAppbar(context: context, title: 'Create Post',
+              actions: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'POST',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ]),
+          body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 25.0,
+                      backgroundImage: NetworkImage(
+                          'https://img.freepik.com/free-photo/cute-ai-generated-cartoon-bunny_23-2150288877.jpg?t=st=1689368568~exp=1689372168~hmac=68d62541df0c10b6bd0cdfe5ffa09da2a48b35bbaef504351d867f0ece62e0af&w=740'),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Omaar Mohamed',
+                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                              height: 1.3,
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'What is on your mind?',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                          onPressed: (){}
+                          , child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.image,
+                            color: Colors.blue,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            'Add Photo',
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ],
+                      )
+
+                      ),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                          onPressed: (){}
+                          , child: const Text(
+                            '# tags',
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          )
+
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-        ),
-      ]),
+        );
+      },
+
     );
   }
 }

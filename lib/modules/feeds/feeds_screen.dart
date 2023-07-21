@@ -290,4 +290,6 @@ class FeedsScreen extends StatelessWidget {
         ],
       ),
     ),
-  );}
+
+  );
+}

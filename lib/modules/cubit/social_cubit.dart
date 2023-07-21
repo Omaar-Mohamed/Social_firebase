@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_project_one/models/post_model.dart';
 import 'package:firebase_project_one/models/social_user_model.dart';
 import 'package:firebase_project_one/modules/chats/chats_screen.dart';
 import 'package:firebase_project_one/modules/feeds/feeds_screen.dart';
+import 'package:firebase_project_one/modules/new_post/new_post_screen.dart';
 import 'package:firebase_project_one/modules/settings/settings_screen.dart';
 import 'package:firebase_project_one/shared/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -43,19 +45,25 @@ int currentIndex=0;
 List<Widget> screens=[
   FeedsScreen(),
   ChatsScreen(),
+  NewPostScreen(),
   UsersScreen(),
   SettingsScreen(),
 ];
 List<String> titles=[
   'Home',
   'Chats',
+  'Post',
   'Users',
   'Settings',
 ];
 void changeBottomNavBar(int index) {
-  currentIndex = index;
+  if (index == 2)
+      emit(SocialNewPostState());
+  else{
+    currentIndex = index;
+    emit(SocialChangeBottomNavState());
 
-  emit(SocialChangeBottomNavState());
+  }
 }
 
   File? profileImage;
@@ -204,5 +212,73 @@ void updateUser({
     emit(SocialUserUpdateErrorState());
   });
 }
+
+  File? postImage;
+  Future<void> getPostImage()async{
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      postImage = File(pickedFile.path);
+      emit(SocialPostImagePickedSuccessState());
+
+    }else{
+      print('No image selected.');
+      emit(SocialPostImagePickedErrorState());
+    }
+  }
+
+  void uploadPostImage({
+
+    required String dateTime,
+    required String? text,
+  }){
+    emit(SocialCreatePostLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('posts/${Uri.file(postImage!.path).pathSegments.last}')
+        .putFile(postImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        print(value);
+        // coverImageUrl=value;
+        createPost(
+          dateTime: dateTime,
+          text: text,
+          postImage: value,
+        );
+        // emit(SocialUploadCoverImageSuccessState());
+      }).catchError((error){
+        emit(SocialCreatePostErrorState());
+      });
+    }).catchError((error){
+      emit(SocialCreatePostErrorState());
+    });
+  }
+
+  void createPost({
+    required String dateTime,
+    required String? text,
+    String? postImage,
+
+  }){
+
+    PostModel model = PostModel(
+      name: userModel!.name,
+      image:  userModel!.image,
+      uId: userModel!.uId ,
+      dateTime: dateTime,
+      text: text,
+      postImage: postImage??'',
+
+    );
+    FirebaseFirestore.instance.collection('posts').doc().set(
+      model.toMap())
+        .then((value) {
+      emit(SocialCreatePostSuccessState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(SocialCreatePostErrorState());
+    });
+  }
+
 
 }
