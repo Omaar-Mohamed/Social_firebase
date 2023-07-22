@@ -1,54 +1,67 @@
+import 'package:firebase_project_one/models/post_model.dart';
+import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
+import 'package:firebase_project_one/modules/cubit/social_states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 10.0,
-            margin: EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Image(
-                image: NetworkImage(
-                    'https://img.freepik.com/free-photo/live-such-moments-as-these_329181-8366.jpg?w=996&t=st=1689371411~exp=1689372011~hmac=4d70c99c4600bc73dec197cdf446c01ae0822501d3d983183a626dcb7feb0443'),
-                fit: BoxFit.cover,
-                height: MediaQuery.of(context).size.height * 0.3,
-                width: double.infinity,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'communicate with friends',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
+    return BlocConsumer<SocialCubit,SocialStates>(
+      listener: (BuildContext context, state) {  },
+      builder: (BuildContext context, Object? state) {
+        return  SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if(SocialCubit.get(context).posts.length == 0)
+                LinearProgressIndicator(),
+              Card(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                elevation: 10.0,
+                margin: EdgeInsets.all(8.0),
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    Image(
+                      image: NetworkImage(
+                          'https://img.freepik.com/free-photo/live-such-moments-as-these_329181-8366.jpg?w=996&t=st=1689371411~exp=1689372011~hmac=4d70c99c4600bc73dec197cdf446c01ae0822501d3d983183a626dcb7feb0443'),
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: double.infinity,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'communicate with friends',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: Colors.white,
+                        ),
                       ),
+                    )
+                  ],
                 ),
-              )
-              ],
-            ),
+              ),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) => buildPostItem(SocialCubit.get(context).posts[index], context),
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 8.0,
+                ),
+                itemCount: SocialCubit.get(context).posts.length,
+              ),
+            ],
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildPostItem(context),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 8.0,
-            ),
-            itemCount: 10,
-          ),
-        ],
-      ),
+        );
+      },
+
     );
   }
-  Widget buildPostItem(BuildContext context) => Card(
+  Widget buildPostItem(PostModel model, BuildContext context) => Card(
     clipBehavior: Clip.antiAliasWithSaveLayer,
     elevation: 10.0,
     margin: EdgeInsets.all(8.0),
@@ -63,7 +76,8 @@ class FeedsScreen extends StatelessWidget {
               CircleAvatar(
                 radius: 25.0,
                 backgroundImage: NetworkImage(
-                    'https://img.freepik.com/free-photo/cute-ai-generated-cartoon-bunny_23-2150288877.jpg?t=st=1689368568~exp=1689372168~hmac=68d62541df0c10b6bd0cdfe5ffa09da2a48b35bbaef504351d867f0ece62e0af&w=740'),
+                    '${model.image}'
+                ),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.02,
@@ -75,7 +89,7 @@ class FeedsScreen extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Omaar Mohamed',
+                          '${model.name}',
                           style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             height: 1.3,
                           ),
@@ -91,7 +105,7 @@ class FeedsScreen extends StatelessWidget {
                       ],
                     ),
                     Text(
-                      'January 21, 2021 at 11:00 PM',
+                      '${model.dateTime}',
                       style: Theme.of(context).textTheme.caption?.copyWith(
                         height: 1.3,
                       ),
@@ -120,7 +134,7 @@ class FeedsScreen extends StatelessWidget {
             ),
           ),
           Text(
-            'loram ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation',
+            '${model.text}',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               height: 1.3,
             ),
@@ -164,14 +178,20 @@ class FeedsScreen extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.23,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://img.freepik.com/free-photo/men-photographing-mountain-peak-sunrise-technology-assists-generated-by-ai_188544-29923.jpg?t=st=1689375998~exp=1689379598~hmac=f95882ab583f19fe1c4e417873b3d23617f3ee3cc51890ae774f5db113adfc19&w=1060'),
-                fit: BoxFit.cover,
+          if (model.postImage != '')
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(
+                0.0, 15.0, 0.0, 0.0
+            ),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.23,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
+                image: DecorationImage(
+                  image: NetworkImage(
+                      '${model.postImage}'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -193,7 +213,7 @@ class FeedsScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.01,
                         ),
                         Text(
-                          '120',
+                          '0',
                           style: Theme.of(context).textTheme.caption?.copyWith(
                             height: 1.3,
                           ),
@@ -220,7 +240,7 @@ class FeedsScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.01,
                         ),
                         Text(
-                          '120 comments',
+                          '0 comments',
                           style: Theme.of(context).textTheme.caption?.copyWith(
                             height: 1.3,
                           ),
@@ -248,7 +268,7 @@ class FeedsScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: MediaQuery.of(context).size.width * 0.04,
                   backgroundImage: NetworkImage(
-                      'https://img.freepik.com/free-photo/cute-ai-generated-cartoon-bunny_23-2150288877.jpg?t=st=1689368568~exp=1689372168~hmac=68d62541df0c10b6bd0cdfe5ffa09da2a48b35bbaef504351d867f0ece62e0af&w=740'),
+                      '${SocialCubit.get(context).userModel!.image}'),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.02,

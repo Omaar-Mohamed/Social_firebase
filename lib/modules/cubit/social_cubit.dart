@@ -286,5 +286,21 @@ void updateUser({
     });
   }
 
+  List<PostModel> posts = [];
+
+  void getPosts(){
+    emit(SocialGetPostsLoadingState());
+    FirebaseFirestore.instance.collection('posts').get().then((value) {
+      print('posts length is ${value.docs.length}');
+      value.docs.forEach((element) {
+        posts.add(PostModel.fromJson(element.data()));
+        print(element.data());
+      });
+      emit(SocialGetPostsSuccessState());
+    }).catchError((error){
+      print(error.toString());
+      emit(SocialGetPostsErrorState(error.toString()));
+    });
+  }
 
 }
