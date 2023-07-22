@@ -226,6 +226,11 @@ void updateUser({
     }
   }
 
+  void removePostImage(){
+    postImage=null;
+    emit(SocialRemovePostImageState());
+  }
+
   void uploadPostImage({
 
     required String dateTime,
@@ -260,6 +265,7 @@ void updateUser({
     String? postImage,
 
   }){
+    emit(SocialCreatePostLoadingState());
 
     PostModel model = PostModel(
       name: userModel!.name,
@@ -270,7 +276,7 @@ void updateUser({
       postImage: postImage??'',
 
     );
-    FirebaseFirestore.instance.collection('posts').doc().set(
+    FirebaseFirestore.instance.collection('posts').add(
       model.toMap())
         .then((value) {
       emit(SocialCreatePostSuccessState());

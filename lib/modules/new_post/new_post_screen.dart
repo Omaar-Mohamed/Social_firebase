@@ -6,18 +6,43 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared/components/componenets.dart';
 
 class NewPostScreen extends StatelessWidget {
-  const NewPostScreen({Key? key}) : super(key: key);
+   NewPostScreen({Key? key}) : super(key: key);
+  var textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit,SocialStates>(
-      listener: (BuildContext context, state) {  },
+      listener: (BuildContext context, state) {
+        if(state is SocialCreatePostSuccessState)
+          {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Post Created Successfully'),
+              backgroundColor: Colors.grey,
+            ),
+          );
+          }
+      },
       builder: (BuildContext context, Object? state) {
         return Scaffold(
           appBar: defaultAppbar(context: context, title: 'Create Post',
               actions: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                   if(SocialCubit.get(context).postImage == null)
+                     {
+                        SocialCubit.get(context).createPost(
+                          dateTime: DateTime.now().toString(),
+                          text: textController.text,
+                        );
+                     } else
+                       {
+                         SocialCubit.get(context).uploadPostImage(
+                           dateTime: DateTime.now().toString(),
+                           text: textController.text,
+                         );
+                       }
+                  },
                   child: Text(
                     'POST',
                     style: TextStyle(
@@ -32,6 +57,8 @@ class NewPostScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
+                if(state is SocialCreatePostLoadingState)
+                  LinearProgressIndicator(),
                 Row(
                   children: [
                     CircleAvatar(
@@ -61,17 +88,55 @@ class NewPostScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextFormField(
+                    controller: textController,
                     decoration: InputDecoration(
                       hintText: 'What is on your mind?',
                       border: InputBorder.none,
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
+                if(SocialCubit.get(context).postImage != null)
+                  Stack(
+                    alignment: AlignmentDirectional.topEnd,
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.26,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          image: DecorationImage(
+                            image: FileImage(SocialCubit.get(context).postImage!),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          SocialCubit.get(context).removePostImage();
+                        },
+                        icon: CircleAvatar(
+                          radius: 20,
+                          child: Icon(
+                            Icons.close,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.01,
+                ),
                 Row(
                   children: [
                     Expanded(
                       child: TextButton(
-                          onPressed: (){}
+                          onPressed: (){
+                            SocialCubit.get(context).getPostImage();
+                          }
                           , child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

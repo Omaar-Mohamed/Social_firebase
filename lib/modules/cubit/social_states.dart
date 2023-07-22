@@ -44,4 +44,4 @@ class SocialPostImagePickedSuccessState extends SocialStates{}
 
 class SocialPostImagePickedErrorState extends SocialStates{}
 
-
+class SocialRemovePostImageState extends SocialStates{}
