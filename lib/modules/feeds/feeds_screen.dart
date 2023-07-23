@@ -17,7 +17,7 @@ class FeedsScreen extends StatelessWidget {
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(SocialCubit.get(context).posts.length == 0)
+              if(SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).likes.length == 0 && SocialCubit.get(context).comments.length == 0 && SocialCubit.get(context).commentsNumbers.length == 0 && SocialCubit.get(context).postsId == 0)
                 LinearProgressIndicator(),
               Card(
                 clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -48,7 +48,7 @@ class FeedsScreen extends StatelessWidget {
               ListView.separated(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => buildPostItem(SocialCubit.get(context).posts[index], context),
+                itemBuilder: (context, index) => buildPostItem(SocialCubit.get(context).posts[index], context,index),
                 separatorBuilder: (context, index) => SizedBox(
                   height: 8.0,
                 ),
@@ -61,7 +61,7 @@ class FeedsScreen extends StatelessWidget {
 
     );
   }
-  Widget buildPostItem(PostModel model, BuildContext context) => Card(
+  Widget buildPostItem(PostModel model, BuildContext context ,index) => Card(
     clipBehavior: Clip.antiAliasWithSaveLayer,
     elevation: 10.0,
     margin: EdgeInsets.all(8.0),
@@ -199,7 +199,10 @@ class FeedsScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    SocialCubit.get(context).likePost(SocialCubit.get(context).postsId[index]);
+
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Row(
@@ -213,7 +216,7 @@ class FeedsScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.01,
                         ),
                         Text(
-                          '0',
+                          '${SocialCubit.get(context).likes[index]}',
                           style: Theme.of(context).textTheme.caption?.copyWith(
                             height: 1.3,
                           ),
@@ -225,7 +228,9 @@ class FeedsScreen extends StatelessWidget {
               ),
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    SocialCubit.get(context).commentPost(postId: SocialCubit.get(context).postsId[index],comment: 'comment');
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Row(
@@ -240,7 +245,7 @@ class FeedsScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.01,
                         ),
                         Text(
-                          '0 comments',
+                          '${SocialCubit.get(context).commentsNumbers[index]} comments',
                           style: Theme.of(context).textTheme.caption?.copyWith(
                             height: 1.3,
                           ),
@@ -280,7 +285,8 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Row(

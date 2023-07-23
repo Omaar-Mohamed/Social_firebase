@@ -276,8 +276,9 @@ void updateUser({
       postImage: postImage??'',
 
     );
-    FirebaseFirestore.instance.collection('posts').add(
-      model.toMap())
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add(model.toMap())
         .then((value) {
       emit(SocialCreatePostSuccessState());
     }).catchError((error) {
@@ -287,14 +288,27 @@ void updateUser({
   }
 
   List<PostModel> posts = [];
-
+  List<String> postsId = [];
+  List<int?> likes = [];
+  List<int?> commentsNumbers = [];
+  List<String?> comments = [];
   void getPosts(){
     emit(SocialGetPostsLoadingState());
     FirebaseFirestore.instance.collection('posts').get().then((value) {
-      print('posts length is ${value.docs.length}');
       value.docs.forEach((element) {
-        posts.add(PostModel.fromJson(element.data()));
-        print(element.data());
+        element.reference.collection('likes').get().then((value) {
+          likes.add(value.docs.length);
+          posts.add(PostModel.fromJson(element.data()));
+          postsId.add(element.id);
+          print(element.id);
+          print(value.docs.length);
+          emit(SocialGetPostsSuccessState());
+        });
+        element.reference.collection('comments').get().then((value) {
+          commentsNumbers.add(value.docs.length);
+          print(value.docs.length);
+        });
+        // print(element.data());
       });
       emit(SocialGetPostsSuccessState());
     }).catchError((error){
@@ -302,5 +316,40 @@ void updateUser({
       emit(SocialGetPostsErrorState(error.toString()));
     });
   }
+
+  void likePost(String? postId){
+    FirebaseFirestore.instance
+    .collection('posts')
+    .doc(postId)
+    .collection('likes')
+    .doc(userModel!.uId)
+    .set({
+      'like':true,
+    }).then((value) {
+      emit(SocialLikePostsSuccessState());
+    }).catchError((error){
+      emit(SocialLikePostsErrorState(error.toString()));
+    });
+
+  }
+
+
+  void commentPost({String? postId,String? comment}){
+    FirebaseFirestore.instance
+    .collection('posts')
+    .doc(postId)
+    .collection('comments')
+    .doc(userModel!.uId)
+    .set({
+      'comment':comment,
+    }).then((value) {
+      emit(SocialCommentPostsSuccessState());
+    }).catchError((error){
+      emit(SocialCommentPostsErrorState(error.toString()));
+    });
+
+  }
+
+
 
 }
