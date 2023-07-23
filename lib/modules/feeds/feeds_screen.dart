@@ -17,7 +17,7 @@ class FeedsScreen extends StatelessWidget {
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).likes.length == 0 && SocialCubit.get(context).comments.length == 0 && SocialCubit.get(context).commentsNumbers.length == 0 && SocialCubit.get(context).postsId == 0)
+              if(SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).likes.length == 0 && SocialCubit.get(context).comments.length == 0 && SocialCubit.get(context).commentsNumbers.length == 0 )
                 LinearProgressIndicator(),
               Card(
                 clipBehavior: Clip.antiAliasWithSaveLayer,
