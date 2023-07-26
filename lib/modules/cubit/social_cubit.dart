@@ -304,10 +304,10 @@ void updateUser({
           print(value.docs.length);
           emit(SocialGetPostsSuccessState());
         });
-        element.reference.collection('comments').get().then((value) {
-          commentsNumbers.add(value.docs.length);
-          print(value.docs.length);
-        });
+        // element.reference.collection('comments').get().then((value) {
+        //   commentsNumbers.add(value.docs.length);
+        //   print(value.docs.length);
+        // });
         // print(element.data());
       });
       emit(SocialGetPostsSuccessState());
@@ -349,7 +349,5 @@ void updateUser({
     });
 
   }
-
-
 
 }

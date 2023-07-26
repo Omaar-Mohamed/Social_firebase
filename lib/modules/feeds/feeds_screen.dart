@@ -17,7 +17,7 @@ class FeedsScreen extends StatelessWidget {
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if(SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).likes.length == 0 && SocialCubit.get(context).comments.length == 0 && SocialCubit.get(context).commentsNumbers.length == 0 )
+              if(SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).posts.length == 0 && SocialCubit.get(context).likes.length == 0  )
                 LinearProgressIndicator(),
               Card(
                 clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -76,7 +76,7 @@ class FeedsScreen extends StatelessWidget {
               CircleAvatar(
                 radius: 25.0,
                 backgroundImage: NetworkImage(
-                    '${model.image}'
+                    '${SocialCubit.get(context).userModel!.image}'
                 ),
               ),
               SizedBox(
@@ -245,7 +245,7 @@ class FeedsScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.01,
                         ),
                         Text(
-                          '${SocialCubit.get(context).commentsNumbers[index]} comments',
+                          '0 comments',
                           style: Theme.of(context).textTheme.caption?.copyWith(
                             height: 1.3,
                           ),
