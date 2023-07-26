@@ -10,63 +10,68 @@ class FeedsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SocialCubit,SocialStates>(
-      listener: (BuildContext context, state) {  },
-      builder: (BuildContext context, Object? state) {
-        return  ConditionalBuilder(
-          condition: SocialCubit.get(context).posts.length > 0,
-          builder: (BuildContext context) {
-            return SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+    return Builder(
+      builder: (context) {
+        SocialCubit.get(context).getUserData();
+        return BlocConsumer<SocialCubit,SocialStates>(
+          listener: (BuildContext context, state) {  },
+          builder: (BuildContext context, Object? state) {
+            return  ConditionalBuilder(
+              condition: SocialCubit.get(context).posts.length > 0,
+              builder: (BuildContext context) {
+                return SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                  Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    elevation: 10.0,
-                    margin: EdgeInsets.all(8.0),
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        Image(
-                          image: NetworkImage(
-                              'https://img.freepik.com/free-photo/live-such-moments-as-these_329181-8366.jpg?w=996&t=st=1689371411~exp=1689372011~hmac=4d70c99c4600bc73dec197cdf446c01ae0822501d3d983183a626dcb7feb0443'),
-                          fit: BoxFit.cover,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          width: double.infinity,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'communicate with friends',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                              color: Colors.white,
+                      Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        elevation: 10.0,
+                        margin: EdgeInsets.all(8.0),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomEnd,
+                          children: [
+                            Image(
+                              image: NetworkImage(
+                                  'https://img.freepik.com/free-photo/live-such-moments-as-these_329181-8366.jpg?w=996&t=st=1689371411~exp=1689372011~hmac=4d70c99c4600bc73dec197cdf446c01ae0822501d3d983183a626dcb7feb0443'),
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: double.infinity,
                             ),
-                          ),
-                        )
-                      ],
-                    ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'communicate with friends',
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => buildPostItem(SocialCubit.get(context).posts[index], context,index),
+                        separatorBuilder: (context, index) => SizedBox(
+                          height: 8.0,
+                        ),
+                        itemCount: SocialCubit.get(context).posts.length,
+                      ),
+                    ],
                   ),
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => buildPostItem(SocialCubit.get(context).posts[index], context,index),
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: 8.0,
-                    ),
-                    itemCount: SocialCubit.get(context).posts.length,
-                  ),
-                ],
-              ),
+                );
+              },
+              fallback: (BuildContext context) {
+                return LinearProgressIndicator();
+              },
             );
           },
-          fallback: (BuildContext context) {
-            return LinearProgressIndicator();
-          },
-        );
-      },
 
+        );
+      }
     );
   }
   Widget buildPostItem(PostModel model, BuildContext context ,index) => Card(
@@ -84,7 +89,7 @@ class FeedsScreen extends StatelessWidget {
               CircleAvatar(
                 radius: 25.0,
                 backgroundImage: NetworkImage(
-                    '${SocialCubit.get(context).userModel!.image}'
+                    '${model.image}'
                 ),
               ),
               SizedBox(

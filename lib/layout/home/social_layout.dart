@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_project_one/modules/cubit/social_cubit.dart';
 import 'package:firebase_project_one/modules/cubit/social_states.dart';
+import 'package:firebase_project_one/modules/login/login_screen.dart';
 import 'package:firebase_project_one/modules/new_post/new_post_screen.dart';
 import 'package:firebase_project_one/shared/components/componenets.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,10 @@ class SocialLayout extends StatelessWidget {
           actions: [
             IconButton(onPressed: (){}, icon: Icon(Icons.notifications)),
             IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+            IconButton(onPressed: (){
+              SocialCubit.get(context).signOut(context);
+              // navigateTo(context, LoginScreen());
+            }, icon: Icon(Icons.logout)),
           ],
         ),
         body:  cubit.screens[cubit.currentIndex],

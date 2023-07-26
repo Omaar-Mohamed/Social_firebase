@@ -24,5 +24,12 @@ class SocialCreateUserErrorState extends LoginStates{
   SocialCreateUserErrorState(this.error);
 }
 
+class SocialGetUserLoadingState extends LoginStates{}
+class SocialGetUserSuccessState extends LoginStates{}
+class SocialGetUserErrorState extends LoginStates{
+  final String error;
+  SocialGetUserErrorState(this.error);
+}
+
 
 
