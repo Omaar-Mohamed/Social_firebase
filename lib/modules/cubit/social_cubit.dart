@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_project_one/models/message_model.dart';
 import 'package:firebase_project_one/models/post_model.dart';
 import 'package:firebase_project_one/models/social_user_model.dart';
 import 'package:firebase_project_one/modules/chats/chats_screen.dart';
@@ -57,7 +58,11 @@ List<String> titles=[
   'Settings',
 ];
 void changeBottomNavBar(int index) {
-  if (index == 2)
+  if (index == 0)
+    getPosts();
+  if (index == 1)
+    getUsers();
+   if (index == 2)
       emit(SocialNewPostState());
   else{
     currentIndex = index;
@@ -293,8 +298,10 @@ void updateUser({
   List<int?> commentsNumbers = [];
   List<String?> comments = [];
   void getPosts(){
+posts=[];
+postsId=[];
     emit(SocialGetPostsLoadingState());
-    FirebaseFirestore.instance.collection('posts').get().then((value) {
+      FirebaseFirestore.instance.collection('posts').get().then((value) {
       value.docs.forEach((element) {
         element.reference.collection('likes').get().then((value) {
           likes.add(value.docs.length);
@@ -349,5 +356,50 @@ void updateUser({
     });
 
   }
+  List<SocialUserModel> users = [];
+  void getUsers(){
+    emit(GetAllUsersLoadingState());
+    if(users.length==0)
+      FirebaseFirestore.instance.collection('users').get().then((value) {
+      value.docs.forEach((element) {
+        if(element.data()['uId']!=userModel!.uId)
+          users.add(SocialUserModel.fromJson(element.data()));
+      });
+      emit(GetAllUsersSuccessState());
+    }).catchError((error){
+      print(error.toString());
+      emit(GetAllUsersErrorState(error.toString()));
+    });
+  }
+
+
+void sendMessage({
+    required String? receiverId,
+    required String dateTime,
+    required String text,
+}){
+    print(receiverId);
+
+    MessageModel model = MessageModel(
+      senderId: userModel!.uId,
+      receiverId: receiverId,
+      dateTime: dateTime,
+      text: text,
+    );
+//send to sender
+    FirebaseFirestore.instance.collection('users').doc(userModel!.uId).collection('chats').doc(receiverId).collection('messages').add(model.toMap()).then((value) {
+      emit(SocialSendMessageSuccessState());
+    }).catchError((error){
+      emit(SocialSendMessageErrorState(error.toString()));
+    });
+//send to receiver
+    FirebaseFirestore.instance.collection('users').doc(receiverId).collection('chats').doc(userModel!.uId).collection('messages').add(model.toMap()).then((value) {
+      emit(SocialSendMessageSuccessState());
+    }).catchError((error){
+      emit(SocialSendMessageErrorState(error.toString()));
+    });
+}
+
+
 
 }

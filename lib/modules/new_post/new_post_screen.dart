@@ -64,7 +64,8 @@ class NewPostScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                          'https://img.freepik.com/free-photo/cute-ai-generated-cartoon-bunny_23-2150288877.jpg?t=st=1689368568~exp=1689372168~hmac=68d62541df0c10b6bd0cdfe5ffa09da2a48b35bbaef504351d867f0ece62e0af&w=740'),
+                          '${SocialCubit.get(context).userModel!.image}'
+                      ),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,
@@ -74,7 +75,7 @@ class NewPostScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Omaar Mohamed',
+                            '${SocialCubit.get(context).userModel!.name}',
                             style: Theme.of(context).textTheme.subtitle1?.copyWith(
                               height: 1.3,
                             ),
