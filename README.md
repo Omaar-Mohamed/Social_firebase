@@ -1,6 +1,7 @@
 # Social_Firebase
 
-Social media application with Firebase and Flutter
+Social media application with Flutter and Firebase:( Firebase Authentication:-email verification- Firebase Firestore- Firebase Cloud Messaging) and real-time chat
+ 
 ## screenshots
 ![WhatsApp Image 2023-07-15 at 04 42 08](https://github.com/Omaar-Mohamed/Social_firebase/assets/102541769/1874b330-3b9c-4460-9dd8-f40a702ff5ed)
 
